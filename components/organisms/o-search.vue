@@ -1,6 +1,7 @@
 <template>
   <div class="o-search">
     <SfSearchBar
+      v-if="isSearchPanelVisible"
       v-model="search"
       :placeholder="$t('Type what you are looking for...')"
       class="sf-header__search"

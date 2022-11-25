@@ -42,9 +42,9 @@
 import { SfMegaMenu, SfList, SfMenuItem, SfBanner } from '@storefront-ui/vue';
 import config from 'config'
 import get from 'lodash-es/get'
-import { prepareCategoryMenuItem } from 'theme/helpers';
+import { prepareCategoryMenuItem, checkWebpSupport } from 'theme/helpers';
 import { mapGetters, mapState } from 'vuex';
-import { checkWebpSupport } from 'theme/helpers'
+
 export default {
   components: { SfMegaMenu, SfList, SfMenuItem, SfBanner },
   props: {

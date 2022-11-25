@@ -1,5 +1,10 @@
 <template>
   <div class="m-product-add-to-cart">
+    <MFlooringCalculator
+      v-if="product.type_id !== 'grouped' && product.type_id !== 'bundle' && product.flooring_area"
+      :product="product"
+      @increase-by="(n) => qty = n "
+    />
     <SfAlert
       v-if="alert"
       class="alert"
@@ -35,6 +40,7 @@
 import { onlineHelper } from '@vue-storefront/core/helpers';
 import { SfAddToCart, SfAlert } from '@storefront-ui/vue';
 import AProductQuantity from 'theme/components/atoms/a-product-quantity';
+import MFlooringCalculator from 'src/modules/flooring-attribute/components/molecules/m-flooring-calculator';
 import AAddToCart from 'theme/components/atoms/a-add-to-cart';
 export default {
   name: 'MProductAddToCart',
@@ -42,7 +48,8 @@ export default {
     SfAddToCart,
     SfAlert,
     AProductQuantity,
-    AAddToCart
+    AAddToCart,
+    MFlooringCalculator
   },
   data () {
     return {

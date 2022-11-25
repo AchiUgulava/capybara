@@ -2,9 +2,25 @@
   <div class="o-header">
     <SfOverlay
       class="overlay"
-      :visible="isHoveredMenu || isSearchPanelVisible"
+      :visible=" isSearchPanelVisible"
       @click="$store.commit('ui/setSearchpanel', false)"
     />
+    <div class="i-header">
+      <div class="icon">
+        <SfImage
+          src="/assets/header-contact.svg"
+          alt="logo"
+          class="sf-header__icons"
+        />
+      </div>
+      <div class="icon">
+        <SfImage
+          src="/assets/icons/header/icons.svg"
+          alt="logo"
+          class="sf-header__icons"
+        />
+      </div>
+    </div>
     <SfHeader
       :active-icon="activeIcon"
       :class="{
@@ -14,7 +30,7 @@
       :style="{'z-index': isHoveredMenu ? 2 : 1}"
     >
       <template #logo>
-        <ALogo />
+        <ALogo class="logo" />
       </template>
       <template #navigation>
         <SfHeaderNavigationItem
@@ -26,23 +42,32 @@
         >
           <router-link
             :class="{active: isCategoryActive(category)}"
-            :to="categoryLink(category)"
+            :to="category.link"
           >
             {{ category.name }}
           </router-link>
-          <MMenu
+          <!-- <MMenu
             :visible="isHoveredMenu && !isSearchPanelVisible"
             :categories-ids="category.children_data"
             :title="category.name"
             @close="isHoveredMenu = false"
-          />
+          /> -->
         </SfHeaderNavigationItem>
       </template>
       <template #search>
         <div class="search-container">
           <OSearch :class="{'desktop-only': !isSearchPanelVisible}" />
+          <SfIcon
+            v-if="!isSearchPanelVisible"
+            icon="search"
+            size="xs"
+            class="sf-header__icon"
+            :style="{'cursor':'pointer'}"
+            :class="{'desktop-only': !isSearchPanelVisible}"
+            @click.native="$store.commit('ui/setSearchpanel', true)"
+          />
           <SfButton
-            v-if="isSearchPanelVisible"
+            v-else
             class="sf-button--text form__action-button form__action-button--secondary mobile-only"
             @click="$store.commit('ui/setSearchpanel', false)"
           >
@@ -52,8 +77,8 @@
       </template>
       <template #header-icons>
         <div class="sf-header__icons">
-          <AAccountIcon class="sf-header__action" />
           <AMicrocartIcon class="sf-header__action" />
+          <AAccountIcon class="sf-header__action" />
         </div>
       </template>
     </SfHeader>
@@ -67,7 +92,7 @@
 </template>
 
 <script>
-import { SfHeader, SfOverlay, SfButton } from '@storefront-ui/vue';
+import { SfHeader, SfOverlay, SfButton, SfImage, SfIcon } from '@storefront-ui/vue';
 import ALogo from 'theme/components/atoms/a-logo';
 import AAccountIcon from 'theme/components/atoms/a-account-icon';
 import AMicrocartIcon from 'theme/components/atoms/a-microcart-icon';
@@ -82,6 +107,8 @@ export default {
   components: {
     SfHeader,
     SfButton,
+    SfImage,
+    SfIcon,
     ALogo,
     AAccountIcon,
     AMicrocartIcon,
@@ -91,7 +118,15 @@ export default {
   },
   data () {
     return {
-      isHoveredMenu: false
+      isHoveredMenu: false,
+      categories: [
+        { id: '1', name: 'HOME', link: '/' },
+        { id: '2', name: 'WOMEN', link: '/women.html' },
+        { id: '3', name: 'MEN', link: '/men.html' },
+        { id: '4', name: 'KIDS', link: '/kids.html' },
+        { id: '5', name: 'JEWELLERY', link: '/jewellery.html' },
+        { id: '6', name: 'ACCESORRIES', link: '/gear.html' }
+      ]
     }
   },
   computed: {
@@ -101,19 +136,22 @@ export default {
     ...mapState('ui', ['isMobileMenu']),
     ...mapGetters('category', ['getCategories', 'getCurrentCategory']),
     ...mapGetters('user', ['isLoggedIn']),
+
+    ...mapGetters('url', ['getCurrentRoute']),
     activeIcon () {
       return this.isLoggedIn ? 'account' : '';
-    },
-    categories () {
-      return getTopLevelCategories(this.getCategories);
     }
+    // categories () {
+    //   return getTopLevelCategories(this.getCategories);
+    // }
   },
   methods: {
     categoryLink (category) {
-      return formatCategoryLink(category);
+      // return formatCategoryLink(category);
     },
     isCategoryActive (category) {
-      return this.getCurrentCategory.path ? this.getCurrentCategory.path.startsWith(category.path) : false;
+      return category.link === this.getCurrentRoute.path
+      // return this.getCurrentCategory.path ? this.getCurrentCategory.path.startsWith(category.path) : false;
     }
   },
   watch: {
@@ -155,8 +193,11 @@ export default {
   --header-navigation-item-margin: 0 2rem 0 0;
   box-sizing: border-box;
   a {
+    font-size: small;
+    margin: 0;
     &.active {
       font-weight: bold;
+      color: var(--c-primary);
     }
   }
   .search-container {
@@ -182,6 +223,21 @@ export default {
     }
   }
 }
+.i-header{
+  height: 42px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: black;
+  color: antiquewhite;
+  .icon{
+    display: flex;
+    flex-direction: row;
+    font-size: x-small;
+    padding: 0 3%;
+  }
+}
+
 .sf-header {
   @include for-mobile {
     &__icons {

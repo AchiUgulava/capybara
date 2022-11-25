@@ -168,7 +168,7 @@ export default {
   background: var(--c-white);
   overflow: auto;
   max-height: calc(66vh - var(--_header-height));
-
+  margin-top: 40px;
   @include for-mobile {
     top: auto;
     max-height: calc(100vh - var(--_header-height) - var(--bottom-navigation-height));

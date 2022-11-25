@@ -7,7 +7,7 @@
     <SfImage
       src="/assets/logo.svg"
       :alt="$t(defaultTitle)"
-      class="sf-header__logo"
+      :height="10"
     />
   </router-link>
 </template>
